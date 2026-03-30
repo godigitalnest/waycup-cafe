@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Waycup Cafe — Your Friendly Neighbourhood Cafe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bark:     #3B2A1A;
+    --bark-mid: #5C3D22;
+    --wood:     #8B5E3C;
+    --grain:    #C4935A;
+    --amber:    #D4A96A;
+    --cream:    #F5EFE0;
+    --linen:    #FAF6ED;
+    --moss:     #5A6B41;
+    --sage:     #8A9E6B;
+    --leaf:     #B5C99A;
+    --charcoal: #2A1F14;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--linen);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ─── TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 18px 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(245, 239, 224, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(139, 94, 60, 0.15);
+    transition: all 0.3s;
+  }
+  nav.scrolled {
+    padding: 12px 5%;
+    background: rgba(245, 239, 224, 0.97);
+    box-shadow: 0 2px 20px rgba(59,42,26,0.08);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--bark);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--wood); font-style: italic; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bark-mid);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--wood); }
+  .nav-cta {
+    background: var(--bark);
+    color: var(--cream) !important;
+    padding: 9px 22px;
+    border-radius: 2px;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.1em;
+  }
+  .nav-cta:hover { background: var(--wood); color: var(--cream) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--bark); transition: all 0.3s; display: block; }
+  @media(max-width:768px) {
+    .hamburger { display: flex; }
+    .nav-links { display: none; position: fixed; top: 0; right: 0; bottom: 0; width: 70%; background: var(--cream); flex-direction: column; justify-content: center; align-items: center; gap: 40px; box-shadow: -8px 0 30px rgba(59,42,26,0.15); }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 1rem; }
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 120px 6% 80px 8%;
+    position: relative; z-index: 2;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--leaf); color: var(--bark);
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 20px; width: fit-content;
+    margin-bottom: 28px;
+    font-weight: 500;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge::before { content: '●'; font-size: 0.5rem; color: var(--moss); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--bark);
+    margin-bottom: 10px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-h1 em { font-style: italic; color: var(--wood); }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--grain);
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-desc {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--bark-mid);
+    max-width: 400px;
+    margin-bottom: 48px;
+    font-weight: 300;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp 0.8s 0.4s ease both; }
+  .btn-primary {
+    background: var(--bark);
+    color: var(--cream);
+    padding: 14px 32px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .btn-primary:hover { background: var(--wood); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1.5px solid var(--bark);
+    color: var(--bark);
+    padding: 13px 32px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover { background: var(--bark); color: var(--cream); transform: translateY(-2px); }
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(139,94,60,0.2);
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--bark);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--wood);
+    margin-top: 4px;
+  }
+
+  .hero-right {
+    position: relative;
+    background: var(--bark);
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(212,169,106,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 30% 80%, rgba(90,107,65,0.2) 0%, transparent 50%);
+  }
+  .wood-rings {
+    position: absolute; inset: 0;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0.06;
+  }
+  .wood-rings svg { width: 140%; height: 140%; }
+  .hero-img-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    gap: 20px; padding: 40px;
+  }
+  .floating-card {
+    background: rgba(245,239,224,0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(245,239,224,0.2);
+    border-radius: 12px;
+    padding: 18px 28px;
+    color: var(--cream);
+    text-align: center;
+    animation: floatCard 4s ease-in-out infinite;
+    width: 180px;
+  }
+  .floating-card:nth-child(2) { animation-delay: -1.3s; width: 160px; }
+  .floating-card:nth-child(3) { animation-delay: -2.6s; width: 170px; }
+  @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .card-emoji { font-size: 2rem; margin-bottom: 8px; }
+  .card-name { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; }
+  .card-tag { font-size:0.7rem; opacity:0.7; letter-spacing:0.08em; margin-top:2px; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  @media(max-width:900px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 50vw; order: -1; }
+    .hero-left { padding: 100px 6% 60px; }
+  }
+
+  /* ─── TICKER ─── */
+  .ticker-wrap {
+    background: var(--bark);
+    padding: 14px 0;
+    overflow: hidden;
+    border-top: 3px solid var(--grain);
+  }
+  .ticker-track {
+    display: flex; gap: 0;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .ticker-item {
+    padding: 0 32px;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .ticker-item::after { content: '✦'; color: var(--grain); font-size: 0.5rem; }
+
+  /* ─── SECTION COMMONS ─── */
+  section { padding: 100px 8%; }
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--wood);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    color: var(--bark);
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .section-title em { font-style: italic; color: var(--wood); }
+  .section-desc {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--bark-mid);
+    font-weight: 300;
+    max-width: 520px;
+  }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── ABOUT ─── */
+  #about { background: var(--cream); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .about-visual {
+    position: relative;
+    height: 480px;
+  }
+  .about-bg-block {
+    position: absolute;
+    top: 20px; left: 20px;
+    width: 85%; height: 90%;
+    background: var(--bark);
+    border-radius: 4px;
+  }
+  .about-main-block {
+    position: absolute;
+    top: 0; left: 0;
+    width: 85%; height: 90%;
+    background: linear-gradient(135deg, var(--grain), var(--amber));
+    border-radius: 4px;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px;
+    overflow: hidden;
+  }
+  .about-main-block::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='25' fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='1'/%3E%3Ccircle cx='30' cy='30' r='18' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1'/%3E%3Ccircle cx='30' cy='30' r='10' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3C/svg%3E") repeat;
+  }
+  .about-photo-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--bark);
+    position: relative; z-index: 1;
+  }
+  .about-photo-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(59,42,26,0.7);
+    margin-top: 6px;
+    position: relative; z-index: 1;
+  }
+  .about-corner-card {
+    position: absolute;
+    bottom: -10px; right: -10px;
+    background: var(--moss);
+    color: var(--leaf);
+    padding: 20px 24px;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .about-corner-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .about-corner-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--leaf);
+    margin-top: 4px;
+  }
+  .about-points { margin-top: 36px; display: flex; flex-direction: column; gap: 20px; }
+  .about-point {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px;
+    background: var(--linen);
+    border-radius: 4px;
+    border-left: 3px solid var(--grain);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .about-point:hover { border-left-color: var(--moss); transform: translateX(4px); }
+  .point-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+  .point-title { font-weight: 500; color: var(--bark); font-size: 0.9rem; margin-bottom: 4px; }
+  .point-text { font-size: 0.85rem; color: var(--bark-mid); font-weight: 300; line-height: 1.6; }
+
+  @media(max-width:900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-visual { height: 300px; }
+  }
+
+  /* ─── MENU ─── */
+  #menu { background: var(--linen); }
+  .menu-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin: 40px 0 32px;
+  }
+  .tab-btn {
+    padding: 8px 20px;
+    background: none;
+    border: 1.5px solid rgba(139,94,60,0.3);
+    color: var(--bark-mid);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .tab-btn:hover, .tab-btn.active {
+    background: var(--bark);
+    border-color: var(--bark);
+    color: var(--cream);
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .menu-item {
+    background: var(--cream);
+    border-radius: 4px;
+    padding: 22px 24px;
+    border: 1px solid rgba(139,94,60,0.12);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-item::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--grain);
+    transition: height 0.3s;
+  }
+  .menu-item:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(59,42,26,0.1); }
+  .menu-item:hover::before { height: 100%; }
+  .item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .item-name { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:var(--bark); }
+  .item-price {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.05rem;
+    font-weight:600;
+    color:var(--wood);
+    white-space: nowrap;
+  }
+  .item-desc { font-size:0.8rem; color:var(--bark-mid); margin-top:8px; font-weight:300; line-height:1.6; }
+  .item-veg {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border: 1.5px solid;
+    border-radius: 1px;
+    margin-top: 10px;
+    position: relative;
+  }
+  .item-veg.veg { border-color: #2d7a2d; }
+  .item-veg.veg::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:6px; height:6px; border-radius:50%; background:#2d7a2d; }
+  .item-veg.nonveg { border-color: #c0392b; }
+  .item-veg.nonveg::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:6px; height:6px; border-radius:50%; background:#c0392b; }
+  .menu-note { font-size:0.75rem; color:var(--wood); margin-top:28px; font-style:italic; text-align:center; }
+
+  /* ─── SPECIALS ─── */
+  #specials { background: var(--bark); overflow: hidden; position: relative; }
+  #specials::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 0% 50%, rgba(90,107,65,0.2), transparent 50%),
+      radial-gradient(ellipse at 100% 0%, rgba(212,169,106,0.15), transparent 40%);
+    pointer-events: none;
+  }
+  #specials .section-label { color: var(--amber); }
+  #specials .section-title { color: var(--cream); }
+  #specials .section-desc { color: rgba(245,239,224,0.65); }
+  .specials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 56px;
+  }
+  .special-card {
+    background: rgba(245,239,224,0.06);
+    border: 1px solid rgba(245,239,224,0.12);
+    border-radius: 6px;
+    padding: 36px 28px;
+    text-align: center;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+  .special-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(212,169,106,0.15), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .special-card:hover { transform: translateY(-8px); border-color: rgba(212,169,106,0.4); }
+  .special-card:hover::after { opacity: 1; }
+  .special-icon { font-size: 3rem; margin-bottom: 20px; }
+  .special-name {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.6rem;
+    font-weight:300;
+    color:var(--cream);
+    margin-bottom: 12px;
+  }
+  .special-name em { font-style:italic; color:var(--amber); }
+  .special-desc { font-size:0.85rem; color:rgba(245,239,224,0.6); font-weight:300; line-height:1.7; }
+  .special-tag {
+    display: inline-block;
+    margin-top: 20px;
+    background: var(--moss);
+    color: var(--leaf);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  @media(max-width:768px) {
+    .specials-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── GARDEN BANNER ─── */
+  .garden-banner {
+    background: var(--moss);
+    padding: 48px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .garden-banner-text .section-label { color: var(--leaf); }
+  .garden-banner-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.8rem,3vw,2.8rem);
+    font-weight:300;
+    color:var(--cream);
+    line-height:1.15;
+  }
+  .garden-banner-title em { font-style:italic; color:var(--leaf); }
+  .garden-banner-desc {
+    margin-top: 10px;
+    font-size:0.9rem;
+    color:rgba(245,239,224,0.7);
+    font-weight:300;
+    max-width:480px;
+  }
+  .btn-garden {
+    background: var(--cream);
+    color: var(--bark);
+    padding: 14px 32px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-radius: 2px;
+    white-space: nowrap;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .btn-garden:hover { background: var(--leaf); transform: translateY(-2px); }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--cream); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    margin-top: 60px;
+    align-items: start;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 28px; }
+  .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+  .contact-icon {
+    width: 44px; height: 44px;
+    background: var(--bark);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-item-label { font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--wood); font-weight:500; }
+  .contact-item-val { font-size:0.95rem; color:var(--bark); margin-top:4px; font-weight:400; }
+  .contact-item-val a { color:var(--bark); text-decoration:none; }
+  .hours-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 20px; margin-top:6px; }
+  .hours-row { display:flex; justify-content:space-between; font-size:0.85rem; color:var(--bark-mid); font-weight:300; }
+  .open-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--leaf); color:var(--moss);
+    font-size:0.7rem; padding:5px 12px; border-radius:20px;
+    font-weight:600; letter-spacing:0.05em; margin-top:8px;
+  }
+  .open-badge .dot { width:7px; height:7px; border-radius:50%; background:var(--moss); }
+  .closed-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#f5d5d0; color:#8B2A22;
+    font-size:0.7rem; padding:5px 12px; border-radius:20px;
+    font-weight:600; letter-spacing:0.05em; margin-top:8px;
+  }
+  .closed-badge .dot { width:7px; height:7px; border-radius:50%; background:#c0392b; }
+
+  .contact-form { display:flex; flex-direction:column; gap:16px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-group label { font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--wood); font-weight:500; }
+  .form-group input, .form-group textarea, .form-group select {
+    background: var(--linen);
+    border: 1.5px solid rgba(139,94,60,0.2);
+    border-radius: 2px;
+    padding: 12px 16px;
+    font-family:'Jost',sans-serif;
+    font-size:0.9rem;
+    color:var(--bark);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--grain);
+  }
+  .form-group textarea { resize:vertical; min-height:100px; }
+  .btn-submit {
+    background: var(--bark);
+    color: var(--cream);
+    padding: 14px 32px;
+    border: none;
+    font-family:'Jost',sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-weight:500;
+    border-radius:2px;
+    cursor:pointer;
+    transition:all 0.3s;
+    display:flex; align-items:center; gap:8px; width:fit-content;
+  }
+  .btn-submit:hover { background:var(--wood); transform:translateY(-2px); }
+
+  @media(max-width:900px) {
+    .contact-grid { grid-template-columns:1fr; gap:40px; }
+    .form-row { grid-template-columns:1fr; }
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--charcoal);
+    padding: 40px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-top: 3px solid var(--bark-mid);
+  }
+  .footer-logo { font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--cream); font-weight:300; }
+  .footer-logo span { color:var(--amber); font-style:italic; }
+  .footer-center { font-size:0.78rem; color:rgba(245,239,224,0.4); letter-spacing:0.05em; text-align:center; }
+  .footer-credit { font-size:0.75rem; color:rgba(245,239,224,0.3); }
+  .footer-credit a { color:var(--amber); text-decoration:none; }
+  .footer-credit a:hover { color:var(--grain); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">Way<span>cup</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#specials">Specials</a></li>
+    <li><a href="#contact" class="nav-cta">Visit Us</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-badge" id="statusBadge">Open Now · Sector 68, Mohali</div>
+    <h1 class="hero-h1">Your Friendly<br><em>Neighbourhood</em><br>Cafe</h1>
+    <p class="hero-sub">Where every cup tells a story.</p>
+    <p class="hero-desc">Tucked in the heart of Sector 68, Waycup is where Mohali comes to slow down — warm interiors, garden seating, and food that actually tastes like care.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">See Our Menu</a>
+      <a href="https://wa.me/918427977077?text=Hi!%20I'd%20like%20to%20make%20a%20reservation%20at%20Waycup%20Cafe." class="btn-outline" target="_blank">Reserve a Table</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">4.4★</div>
+        <div class="stat-label">TripAdvisor</div>
+      </div>
+      <div>
+        <div class="stat-num">900+</div>
+        <div class="stat-label">Happy Guests</div>
+      </div>
+      <div>
+        <div class="stat-num">4 Yrs</div>
+        <div class="stat-label">Since 2021</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="wood-rings">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#C4935A" stroke-width="1">
+          <circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="170"/>
+          <circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="130"/>
+          <circle cx="200" cy="200" r="110"/><circle cx="200" cy="200" r="90"/>
+          <circle cx="200" cy="200" r="70"/><circle cx="200" cy="200" r="50"/>
+          <circle cx="200" cy="200" r="30"/><circle cx="200" cy="200" r="15"/>
+          <line x1="10" y1="200" x2="390" y2="200"/>
+          <line x1="200" y1="10" x2="200" y2="390"/>
+          <line x1="60" y1="60" x2="340" y2="340"/>
+          <line x1="340" y1="60" x2="60" y2="340"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-img-placeholder">
+      <div class="floating-card">
+        <div class="card-emoji">☕</div>
+        <div class="card-name">Cold Americano</div>
+        <div class="card-tag">House Favourite</div>
+      </div>
+      <div class="floating-card">
+        <div class="card-emoji">🌿</div>
+        <div class="card-name">Garden Seating</div>
+        <div class="card-tag">Outdoor Experience</div>
+      </div>
+      <div class="floating-card">
+        <div class="card-emoji">🍕</div>
+        <div class="card-name">Wood-fired Pizza</div>
+        <div class="card-tag">Chef's Special</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label reveal">Est. 2021 · Sector 68 Mohali</div>
+  <h2 class="section-title reveal">More than a cafe.<br><em>It's a feeling.</em></h2>
+  <p class="section-desc reveal">Waycup was born with a simple idea — to create a space where neighbours become regulars, strangers become friends, and every visit feels like coming home.</p>
+
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-bg-block"></div>
+      <div class="about-main-block">
+        <div class="about-photo-label">Your table is waiting</div>
+        <div class="about-photo-sub">📸 Photos coming soon</div>
+      </div>
+      <div class="about-corner-card">
+        <div class="about-corner-num">🌳</div>
+        <div class="about-corner-label">Garden Seating</div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <p style="font-size:1rem;line-height:1.9;color:var(--bark-mid);font-weight:300;margin-bottom:32px;">
+        Nestled in Sector 68, Mohali, Waycup has been a beloved neighbourhood spot since 2021. We're not just a cafe — we're a community. From the morning coffee crowd to the evening dessert seekers, every corner of Waycup is designed to make you feel at ease.
+      </p>
+      <div class="about-points">
+        <div class="about-point">
+          <div class="point-icon">🌿</div>
+          <div>
+            <div class="point-title">Outdoor Garden Seating</div>
+            <div class="point-text">Unwind under open skies in our lush garden seating area — a rare escape in the heart of the city.</div>
+          </div>
+        </div>
+        <div class="about-point">
+          <div class="point-icon">🍽️</div>
+          <div>
+            <div class="point-title">Thoughtful Menu</div>
+            <div class="point-text">From handcrafted pastas and crispy pizzas to refreshing mocktails and indulgent desserts — made with care every time.</div>
+          </div>
+        </div>
+        <div class="about-point">
+          <div class="point-icon">💛</div>
+          <div>
+            <div class="point-title">Neighbourhood Warmth</div>
+            <div class="point-text">Our regulars don't just visit — they belong here. Warm staff, soothing interiors, and a vibe that never gets old.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-label reveal">What We Serve</div>
+  <h2 class="section-title reveal">Our <em>Menu</em></h2>
+  <p class="section-desc reveal">A little bit of everything, all made with love. Browse by category below.</p>
+
+  <div class="menu-tabs reveal" id="menuTabs"></div>
+  <div class="menu-grid reveal" id="menuGrid"></div>
+  <p class="menu-note reveal">✦ All prices approximate · Menu items may vary by season · ₹ indicates starting price</p>
+</section>
+
+<!-- SPECIALS -->
+<section id="specials">
+  <div class="section-label reveal">House Favourites</div>
+  <h2 class="section-title reveal">The ones guests <em>always</em> come back for</h2>
+  <p class="section-desc reveal">Three dishes that have become a part of Waycup's soul. Order once, order forever.</p>
+
+  <div class="specials-grid reveal">
+    <div class="special-card">
+      <div class="special-icon">🥪</div>
+      <div class="special-name">The <em>Grilled Chicken</em> Wrap</div>
+      <div class="special-desc">Tender grilled chicken, crisp veggies, and our house sauce — wrapped just right. A crowd favourite since day one.</div>
+      <span class="special-tag">⭐ Most Ordered</span>
+    </div>
+    <div class="special-card">
+      <div class="special-icon">🍕</div>
+      <div class="special-name">Classic <em>Margherita</em> Pizza</div>
+      <div class="special-desc">Fresh mozzarella, san marzano-style sauce, and aromatic basil on a perfectly baked crust. Simple. Unforgettable.</div>
+      <span class="special-tag">👨‍🍳 Chef's Pick</span>
+    </div>
+    <div class="special-card">
+      <div class="special-icon">🌿</div>
+      <div class="special-name"><em>Virgin</em> Mojito</div>
+      <div class="special-desc">Fresh mint, lime, and a touch of sweetness over crushed ice. The perfect companion for our garden seating.</div>
+      <span class="special-tag">☀️ Garden Special</span>
+    </div>
+  </div>
+</section>
+
+<!-- GARDEN BANNER -->
+<div class="garden-banner reveal">
+  <div class="garden-banner-text">
+    <div class="section-label">Outdoor Experience</div>
+    <div class="garden-banner-title">Dine under the<br><em>open sky.</em></div>
+    <p class="garden-banner-desc">Our garden seating is the gem of Waycup — a green, breezy spot to linger over your meal. Perfect for dates, family lunches, or just a quiet coffee break.</p>
+  </div>
+  <a href="https://wa.me/918427977077?text=Hi!%20I'd%20like%20to%20book%20the%20garden%20seating%20at%20Waycup%20Cafe." class="btn-garden" target="_blank">Book Garden Seating →</a>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal">Find Us</div>
+  <h2 class="section-title reveal">Come say <em>hello.</em></h2>
+  <p class="section-desc reveal">Walk in anytime or drop us a message to reserve your spot. We're always happy to have you.</p>
+
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-item-label">Address</div>
+          <div class="contact-item-val">SCO 1, Main Market, Sector 68<br>Mohali, Punjab 160068</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-item-label">Phone / WhatsApp</div>
+          <div class="contact-item-val"><a href="tel:+918427977077">+91 84279 77077</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <div class="contact-item-label">Hours</div>
+          <div class="contact-item-val">
+            <div class="hours-grid">
+              <div class="hours-row"><span>Mon – Sun</span><span>10 AM – 10 PM</span></div>
+            </div>
+            <div id="hoursBadge"></div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🌐</div>
+        <div>
+          <div class="contact-item-label">Also Find Us On</div>
+          <div class="contact-item-val" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
+            <a href="https://www.instagram.com/mywaycupcafe" target="_blank" style="color:var(--wood);font-size:0.85rem;">📸 Instagram</a>
+            <a href="https://www.tripadvisor.in/Restaurant_Review-g1584804-d33281306-Reviews-Waycup_Cafe-Mohali_Mohali_District_Punjab.html" target="_blank" style="color:var(--wood);font-size:0.85rem;">🌍 TripAdvisor</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="fname" placeholder="First Name"/>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="fphone" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Occasion</label>
+        <select id="foccasion">
+          <option value="">Select an occasion</option>
+          <option>Just visiting</option>
+          <option>Birthday dinner</option>
+          <option>Date night</option>
+          <option>Family lunch</option>
+          <option>Work meet</option>
+          <option>Garden seating booking</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message (optional)</label>
+        <textarea id="fmsg" placeholder="Any special requests, dietary needs, or just a hello…"></textarea>
+      </div>
+      <button class="btn-submit" onclick="sendWhatsApp()">
+        <span>Send via WhatsApp</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Way<span>cup</span> Cafe</div>
+  <div class="footer-center">© 2025 Waycup Cafe · Sector 68, Mohali · All rights reserved</div>
+  <div class="footer-credit">Website by <a href="https://godigitalnest.com" target="_blank">DigiNest</a></div>
+</footer>
+
+<script>
+// ─── MENU DATA ───
+const menu = {
+  "Coffee & Drinks": [
+    { name:"Cold Americano", price:"₹120+", desc:"Chilled espresso over ice — clean, bold, refreshing.", veg:true },
+    { name:"Cafe Latte", price:"₹140+", desc:"Smooth espresso with velvety steamed milk.", veg:true },
+    { name:"Cappuccino", price:"₹130+", desc:"Classic frothy cap, done right.", veg:true },
+  ],
+  "Mocktails": [
+    { name:"Virgin Mojito", price:"₹150+", desc:"Mint, lime, soda — the garden in a glass.", veg:true },
+    { name:"Blue Lagoon", price:"₹160+", desc:"Citrusy blue curacao syrup with a tropical twist.", veg:true },
+    { name:"Watermelon Cooler", price:"₹155+", desc:"Fresh watermelon blended with mint and lime.", veg:true },
+  ],
+  "Pizza": [
+    { name:"Classic Margherita", price:"₹260+", desc:"San marzano sauce, mozzarella, fresh basil.", veg:true },
+    { name:"BBQ Chicken", price:"₹320+", desc:"Smoky BBQ sauce, grilled chicken, onions, capsicum.", veg:false },
+    { name:"Farm Fresh Veggie", price:"₹280+", desc:"Seasonal veggies on a herbed tomato base.", veg:true },
+  ],
+  "Pasta": [
+    { name:"Penne Arrabbiata", price:"₹220+", desc:"Spicy tomato sauce with garlic and chilli flakes.", veg:true },
+    { name:"Chicken Alfredo", price:"₹280+", desc:"Creamy white sauce pasta with grilled chicken.", veg:false },
+    { name:"Aglio e Olio", price:"₹210+", desc:"Classic olive oil, garlic and parsley — simple perfection.", veg:true },
+  ],
+  "Burgers": [
+    { name:"Classic Veg Burger", price:"₹180+", desc:"Crispy patty, fresh lettuce, house sauce, toasted bun.", veg:true },
+    { name:"Grilled Chicken Burger", price:"₹220+", desc:"Juicy grilled chicken breast with coleslaw.", veg:false },
+    { name:"Mushroom Swiss Burger", price:"₹200+", desc:"Sautéed mushrooms with melted Swiss cheese.", veg:true },
+  ],
+  "Desserts": [
+    { name:"Chocolate Lava Cake", price:"₹190+", desc:"Warm molten centre with a scoop of vanilla.", veg:true },
+    { name:"Baked Cheesecake", price:"₹200+", desc:"Classic New York style with berry compote.", veg:true },
+    { name:"Tiramisu", price:"₹210+", desc:"Espresso-soaked layers of mascarpone bliss.", veg:true },
+  ],
+};
+
+const categories = Object.keys(menu);
+let activeTab = categories[0];
+
+function renderTabs() {
+  const tabsEl = document.getElementById('menuTabs');
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (cat === activeTab ? ' active' : '');
+    btn.textContent = cat;
+    btn.onclick = () => { activeTab = cat; renderTabs(); renderItems(); };
+    tabsEl.appendChild(btn);
+  });
+}
+
+function renderItems() {
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = '';
+  (menu[activeTab] || []).forEach(item => {
+    grid.innerHTML += `
+      <div class="menu-item">
+        <div class="item-header">
+          <div class="item-name">${item.name}</div>
+          <div class="item-price">${item.price}</div>
+        </div>
+        <div class="item-desc">${item.desc}</div>
+        <div class="item-veg ${item.veg ? 'veg' : 'nonveg'}"></div>
+      </div>`;
+  });
+}
+
+function renderTicker() {
+  const items = [
+    "Coffee & Drinks","Mocktails","Pizzas","Pastas","Burgers",
+    "Desserts","Garden Seating","Wraps & Sandwiches","Shakes","Salads",
+    "Outdoor Dining","4.4★ on TripAdvisor","Est. 2021","Sector 68 Mohali"
+  ];
+  const track = document.getElementById('ticker');
+  const doubled = [...items, ...items];
+  doubled.forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'ticker-item';
+    span.textContent = t;
+    track.appendChild(span);
+  });
+}
+
+// ─── OPEN / CLOSED BADGE ───
+var OPEN_HOUR  = 10;
+var CLOSE_HOUR = 22;
+function updateBadge() {
+  const now = new Date(new Date().toLocaleString("en-US", {timeZone:"Asia/Kolkata"}));
+  const h = now.getHours();
+  const isOpen = h >= OPEN_HOUR && h < CLOSE_HOUR;
+  const badge = document.getElementById('statusBadge');
+  const hoursBadge = document.getElementById('hoursBadge');
+  if (isOpen) {
+    badge.style.background = 'var(--leaf)'; badge.style.color = 'var(--bark)';
+    badge.innerHTML = '● Open Now · Sector 68, Mohali';
+    hoursBadge.innerHTML = '<span class="open-badge"><span class="dot"></span>Open Now</span>';
+  } else {
+    badge.style.background = '#f5d5d0'; badge.style.color = '#8B2A22';
+    badge.innerHTML = '● Closed · Opens at 10:00 AM';
+    hoursBadge.innerHTML = '<span class="closed-badge"><span class="dot"></span>Closed · Opens 10 AM</span>';
+  }
+}
+updateBadge(); setInterval(updateBadge, 60000);
+
+// ─── WHATSAPP FORM ───
+function sendWhatsApp() {
+  const name = document.getElementById('fname').value.trim() || 'Guest';
+  const phone = document.getElementById('fphone').value.trim();
+  const occasion = document.getElementById('foccasion').value || 'Just visiting';
+  const msg = document.getElementById('fmsg').value.trim();
+  const text = encodeURIComponent(
+    `Hi Waycup Cafe! 👋\n\nName: ${name}\nPhone: ${phone || '—'}\nOccasion: ${occasion}${msg ? '\nMessage: ' + msg : ''}\n\nLooking forward to visiting!`
+  );
+  window.open(`https://wa.me/918427977077?text=${text}`, '_blank');
+}
+
+// ─── NAV SCROLL ───
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ─── HAMBURGER ───
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+// ─── SCROLL REVEAL ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── INIT ───
+renderTabs(); renderItems(); renderTicker();
+</script>
+</body>
+</html>
